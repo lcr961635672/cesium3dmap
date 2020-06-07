@@ -1,2 +1,2 @@
 # project
-vue、cesium实战项目。
+vue-cesium实战项目。
