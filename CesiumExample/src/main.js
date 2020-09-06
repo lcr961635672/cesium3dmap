@@ -4,9 +4,11 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import $ from 'jquery'
+import * as Cesium from "cesium/Cesium";
+import "cesium/Widgets/widgets.css";
 
 Vue.config.productionTip = false
-
+Vue.prototype.Cesium = Cesium
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
