@@ -1,8 +1,8 @@
 <template>
   <div class="footerWrap">
     <div class="row">视高：{{viewHeight}}米</div>
-    <div class="row">俯仰角：{{fyAngle}}度</div>
-    <div class="row">方向：{{angle}}度</div>
+    <div class="row">俯仰角：{{pitch}}度</div>
+    <div class="row">方向：{{heading}}度</div>
     <div class="row">海拔：{{height}}米</div>
     <div class="row">纬度：{{lat}}</div>
     <div class="row">经度：{{long}}</div>
@@ -16,11 +16,11 @@ export default {
   data() {
     return {
       height: 0,
-      viewHeight: 10000000000,
-      fyAngle: 40,
-      angle: 60,
-      long: 114,
-      lat: 30,
+      viewHeight: 0,
+      pitch: 0,
+      heading: 0,
+      long: 0,
+      lat: 0,
     };
   },
 
@@ -49,6 +49,9 @@ export default {
         self.height = viewer.scene.globe.getHeight(cartographic).toFixed(4);
         //获取相机高度
         self.viewHeight = Math.ceil(viewer.camera.positionCartographic.height);
+        let position = viewer.camera.position;
+        self.heading = viewer.camera.heading; // 偏航角 机体轴在水平面上的投影与地轴之间的夹角，以机头右偏为正。
+        self.pitch = viewer.camera.pitch;  //俯仰角  机体轴与地平面（水平面 ）之间的夹角，飞机抬头为正；
       }
     }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
   },

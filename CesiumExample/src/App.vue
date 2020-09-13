@@ -1,20 +1,24 @@
 <template>
   <div id="app">
     <cesium></cesium>
+    <leftMenu></leftMenu>
   </div>
 </template>
 
 <script>
-import cesium from './components/layout/cesium.vue'
+import cesium from "./components/layout/cesium.vue";
+import leftMenu from "./components/layout/leftMenu";
 export default {
-  name: 'App',
-  components: {cesium}
-}
+  name: "App",
+  components: { cesium, leftMenu },
+};
 </script>
 
 <style>
-#app,html,body {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+#app,
+html,
+body {
+  font-family: "Helvetica Neue",Helvetica,Tahoma,Arial,"Microsoft Yahei","Hiragino Sans GB","WenQuanYi Micro Hei",sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
