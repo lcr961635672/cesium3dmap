@@ -19,7 +19,7 @@ class Globe {
             vrButton: true, //进入vr模式按钮
             fullscreenButton: true, //全屏
             infoBox: false, //默认消息框
-            terrainProvider: Cesium.createWorldTerrain(), //添加全球地形
+            //terrainProvider: Cesium.createWorldTerrain(), //添加全球地形
             imageryProvider: new Cesium.WebMapTileServiceImageryProvider({ //添加底图图层
                 url: MapConfig.tdtYXURL,  //天地图影像
                 layer: "tdtAnnoLayer",

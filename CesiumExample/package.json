@@ -13,6 +13,7 @@
   "dependencies": {
     "cesium": "^1.70.1",
     "cesium-navigation-es6": "^1.0.9",
+    "element-ui": "^2.13.2",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },

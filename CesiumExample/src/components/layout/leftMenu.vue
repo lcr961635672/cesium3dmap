@@ -261,12 +261,12 @@ export default {
         //   });
         //   self.$parent.$refs.lefttool.queryIClose();
         //   break;
-        // case "视角书签":
-        //   self.$nextTick(() => {
-        //     self.dynamicComponents = resolve =>
-        //       require(["../rightTools/viewBook.vue"], resolve);
-        //   });
-        //   break;
+        case "视角书签":
+          self.$nextTick(() => {
+            self.dynamicComponents = resolve =>
+              require(["../toolsPanel/viewBook.vue"], resolve);
+          });
+          break;
         // case "三维分析":
         //   self.$nextTick(() => {
         //     self.dynamicComponents = resolve =>
