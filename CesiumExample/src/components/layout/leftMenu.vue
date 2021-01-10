@@ -4,30 +4,30 @@
     <div class="mainMenuLeft">
       <div class="menuTool">
         <div
-          :class="[{ active: selectMenuIndex==indexP }, 'menuToolItem']"
-          v-for="(itemParent,indexP) in menuData"
+          :class="[{ active: selectMenuIndex == indexP }, 'menuToolItem']"
+          v-for="(itemParent, indexP) in menuData"
           :key="indexP"
-          @click="clickMenu(itemParent,indexP)"
+          @click="clickMenu(itemParent, indexP)"
         >
           <img
-            v-show="selectMenuIndex!=indexP"
+            v-show="selectMenuIndex != indexP"
             class="toolImg"
-            :src="'./static/img/firstMenu/'+itemParent.name+'.png'"
+            :src="'./static/img/firstMenu/' + itemParent.name + '.png'"
             alt
           />
           <img
-            v-show="selectMenuIndex==indexP"
+            v-show="selectMenuIndex == indexP"
             class="toolImg"
-            :src="'./static/img/firstMenu/'+itemParent.name+'1.png'"
+            :src="'./static/img/firstMenu/' + itemParent.name + '1.png'"
             alt
           />
-          {{itemParent.name}}
+          {{ itemParent.name }}
         </div>
       </div>
     </div>
     <div class="menuRightPanel" v-show="showPanelBtn">
       <div class="headerMenu">
-        {{menuName}}
+        {{ menuName }}
         <img
           class="closeImg"
           src="../../../static/img/index/close.png"
@@ -35,7 +35,11 @@
           alt
         />
       </div>
-      <component class="contentPanel" v-bind:is="dynamicComponents" ref="child"></component>
+      <component
+        class="contentPanel"
+        v-bind:is="dynamicComponents"
+        ref="child"
+      ></component>
     </div>
   </div>
 </template>
@@ -89,23 +93,23 @@ export default {
             },
           ],
         },
-        /* {
-          name: "常用工具",
-          children: [
-            {
-              name: "图属互查",
-              active: false
-            },
-            {
-              name: "打印输出",
-              active: false
-            },
-            {
-              name: "清除",
-              active: false
-            }
-          ]
-        }, */
+        {
+          name: "坐标定位",
+          children: [],
+        },
+        //  {
+        //   name: "常用工具",
+        //   children: [
+        //     {
+        //       name: "打印输出",
+        //       active: false
+        //     },
+        //     {
+        //       name: "清除",
+        //       active: false
+        //     }
+        //   ]
+        // },
         {
           name: "空间查询",
           children: [
@@ -181,10 +185,7 @@ export default {
             },
           ],
         },
-        {
-          name: "方案评审",
-          children: [],
-        },
+
         /* {
           name: "控规盒子",
           children: []
@@ -241,19 +242,17 @@ export default {
           });
           break;
         case "空间测量":
-           self.$nextTick(() => {
+          self.$nextTick(() => {
             self.dynamicComponents = (resolve) =>
               require(["../toolsPanel/spaceMeasure.vue"], resolve);
           });
-          // self.$nextTick(() => {
-          //   self.dynamicComponents = (resolve) =>
-          //     require(["../toolsPanel/spaceMeasure.vue"], resolve);
-          // });
-        // self.$nextTick(() => {
-        //   self.dynamicComponents = (resolve) =>
-        //     require(["../toolsPanel/spaceMeasure.vue"], resolve);
-        // });
-        // break;
+          break;
+        case "坐标定位":
+          self.$nextTick(() => {
+            self.dynamicComponents = (resolve) =>
+              require(["../toolsPanel/coordinatePosition.vue"], resolve);
+          });
+          break;
         // case "空间查询":
         //   self.$nextTick(() => {
         //     self.dynamicComponents = resolve =>
@@ -263,7 +262,7 @@ export default {
         //   break;
         case "视角书签":
           self.$nextTick(() => {
-            self.dynamicComponents = resolve =>
+            self.dynamicComponents = (resolve) =>
               require(["../toolsPanel/viewBook.vue"], resolve);
           });
           break;

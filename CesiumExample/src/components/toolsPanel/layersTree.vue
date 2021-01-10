@@ -154,7 +154,6 @@ export default {
   computed: {},
 
   mounted() {
-    debugger
   },
 
   methods: {

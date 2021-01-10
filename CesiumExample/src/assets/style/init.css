@@ -1,1 +1,6 @@
+/* 去除标签初始属性 */
 ul,li{ padding:0;margin:0;list-style:none}
+/* element默认样式修改 */
+.el-form-item__label{
+    color:#fff;
+}

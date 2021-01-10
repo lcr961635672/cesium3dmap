@@ -1,19 +1,23 @@
 <template>
   <div class="container">
+    <div class="headerWrap">
+      <img src="../../../static/img/index/logo.png" alt="" />
+      <h1 class="titleText">三维展示平台</h1>
+    </div>
     <div id="cesiumContainer"></div>
     <footerMain v-if="showGloble"></footerMain>
   </div>
 </template>
 
 <script>
-import footerMain from './footer'
-import Globe from '../../core/globe'
- //import CesiumNavigation from "cesium-navigation-es6";
+import footerMain from "./footer";
+import Globe from "../../core/globe";
+//import CesiumNavigation from "cesium-navigation-es6";
 export default {
   name: "cesiumPage",
   data() {
     return {
-      showGloble: false
+      showGloble: false,
     };
   },
   mounted() {
@@ -24,8 +28,8 @@ export default {
     self.showGloble = true;
   },
   components: {
-    footerMain
-  }
+    footerMain,
+  },
 };
 </script>
 
@@ -37,5 +41,23 @@ export default {
 #cesiumContainer {
   width: 100%;
   height: 100vh;
+}
+.headerWrap {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 998;
+  width: 100%;
+}
+.headerWrap img {
+  width: 100%;
+}
+.titleText {
+  z-index: 999;
+  color: #fff;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
 }
 </style>
