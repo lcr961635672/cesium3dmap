@@ -33,7 +33,7 @@ export default {
       formCoordinate: {
         long: 116.3914,
         lat: 39.9041,
-        height: 200,
+        height: 200000,
       },
     };
   },
@@ -56,6 +56,10 @@ export default {
         ),
         billboard: {
           image: "./static/img/index/position.png",
+          heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+          horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
+          verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+          scale: 0.5,
           width: 25,
           height: 25,
         },
