@@ -143,11 +143,11 @@ export default {
               active: false,
             },
             {
-              name: "通透分析",
+              name: "通视分析",
               active: false,
             },
             {
-              name: "可视域分析",
+              name: "可视域",
               active: false,
             },
             {
@@ -159,7 +159,7 @@ export default {
               active: false,
             },
             {
-              name: "地形挖洞分析",
+              name: "地形开挖",
               active: false,
             },
             {
@@ -167,7 +167,7 @@ export default {
               active: false,
             },
             {
-              name: "挖填方分析",
+              name: "挖填方",
               active: false,
             },
           ],
@@ -266,6 +266,11 @@ export default {
               require(["../toolsPanel/viewBook.vue"], resolve);
           });
           break;
+          case "空间分析":
+          self.$nextTick(() => {
+            self.dynamicComponents = (resolve) =>
+              require(["../toolsPanel/spatialAnalysis.vue"], resolve);
+          });
         // case "三维分析":
         //   self.$nextTick(() => {
         //     self.dynamicComponents = resolve =>
