@@ -2,15 +2,17 @@
   <div id="app">
     <cesium></cesium>
     <leftMenu></leftMenu>
+    <right-bottom-tool></right-bottom-tool>
   </div>
 </template>
 
 <script>
 import cesium from "./components/layout/cesium.vue";
 import leftMenu from "./components/layout/leftMenu";
+import rightBottomTool from "./components/layout/rightBottomTool";
 export default {
   name: "App",
-  components: { cesium, leftMenu },
+  components: { cesium, leftMenu, rightBottomTool }
 };
 </script>
 
@@ -27,5 +29,6 @@ body {
   margin: 0;
   padding: 0;
   font-size: 14px;
+  overflow: hidden;
 }
 </style>

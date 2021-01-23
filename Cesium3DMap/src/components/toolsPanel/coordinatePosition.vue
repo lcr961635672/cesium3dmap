@@ -32,8 +32,8 @@ export default {
       formCoordinate: {
         long: 116.3914,
         lat: 39.9041,
-        height: 20000,
-      },
+        height: 20000
+      }
     };
   },
 
@@ -46,7 +46,11 @@ export default {
   methods: {
     goToPosition() {
       const self = this;
-      self.viewer.scene.globe.depthTestAgainstTerrain = true;
+      //为false时，没有高程遮挡效果
+      //viewer.scene.globe.depthTestAgainstTerrain = false;
+      //为true时，有高程遮挡效果
+      //viewer.scene.globe.depthTestAgainstTerrain = true;
+      self.viewer.scene.globe.depthTestAgainstTerrain = false;
       self.viewer.entities.add({
         position: Cesium.Cartesian3.fromDegrees(
           self.formCoordinate.long,
@@ -59,18 +63,18 @@ export default {
           horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
           verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
           width: 45,
-          height: 45,
-        },
+          height: 45
+        }
       });
       self.viewer.camera.flyTo({
         destination: Cesium.Cartesian3.fromDegrees(
           self.formCoordinate.long,
           self.formCoordinate.lat,
           self.formCoordinate.height
-        ),
+        )
       });
-    },
-  },
+    }
+  }
 };
 </script>
 <style scoped>
