@@ -1,0 +1,78 @@
+/* 去除标签初始属性 */
+
+ul, li {
+    padding: 0;
+    margin: 0;
+    list-style: none
+}
+
+/* element默认样式修改 */
+
+.el-form-item__label {
+    color: #fff;
+}
+
+/* 块元素转行内元素 */
+
+.blockToLine {
+    display: inline;
+}
+
+/* 行内元素转块元素 */
+
+.lineToBlock {
+    display: inline-block;
+}
+.getCursor {
+    cursor: pointer;
+}
+/* 左浮动 */
+
+.leftFloat {
+    float: left;
+}
+
+/* 向右浮动 */
+
+.rightFloat {
+    float: right;
+}
+
+/* 修改输入框默认样式开始 */
+
+.elInputWrapInit .el-input {
+    box-sizing: border-box;
+}
+
+/* 修改输入框默认样式结束 */
+
+.elInputWrapInit .el-input__inner {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 0;
+    color: #fff;
+}
+
+/* 统一表单输入框宽度 */
+
+.formItem {
+    width: 10vw;
+}
+
+/* 空间分析-子组件头部公共样式 开始 */
+
+.spaceChildHeaderWrap {
+    padding: 5px 0;
+    border-bottom: 1px dotted#fff;
+    overflow: hidden;
+}
+
+.spaceChildHeaderWrap .leftHeader {
+    float: left;
+}
+
+.spaceChildHeaderWrap .rightHeader {
+    float: right;
+    cursor: pointer;
+}
+
+/* 空间分析-子组件头部公共样式 结束 */
