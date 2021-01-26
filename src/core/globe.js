@@ -6,6 +6,8 @@ class Globe {
   //初始化球方法
   initGlobe() {
     const self = this;
+    //cesium授权 token
+    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIxNmVjNTk0ZC0xYzY1LTQ0ZWUtOWI2Ny1hMjRiNWI1Y2QwZDAiLCJpZCI6OTAxMywic2NvcGVzIjpbImFzciIsImdjIl0sImlhdCI6MTU1MzIxOTM3Mn0.qi5nscj1ebAxZ0qQX35bKk3c71gBnIUhBmq8wEo3JLY'
     let viewer = new Cesium.Viewer("cesiumContainer", {
       animation: false, //是否创建动画小部件（左下角）
       timeline: false, //是否粗昂见时间轴小部件（底部）
@@ -13,11 +15,24 @@ class Globe {
       fullscreenButton: false, //是否创建全屏小部件（右上）
       geocoder: false, //是否创建搜索小部件（右上）
       homeButton: true, //是否创建默认位置小部件（右上）
-      navigationHelpButton: true, //是否创建导航小部件（右上）
+      navigationHelpButton: false, //是否创建导航小部件（右上）
       sceneModePicker: false, //是否设置维度选择小部件，二维，三维，2,5维（右上）
       vrButton: true, //进入vr模式按钮
       fullscreenButton: true, //全屏
       infoBox: false, //默认消息框
+      contextOptions: { //地图打印时用到
+        id: "cesiumCanvas",//must
+        webgl: {
+          alpha: true,
+          depth: false,
+          stencil: true,
+          antialias: true,
+          premultipliedAlpha: true,
+          preserveDrawingBuffer: true, //通过canvas.toDataURL()实现截图需要将该项设置为true
+          failIfMajorPerformanceCaveat: true
+        },
+        allowTextureFilterAnisotropic: true
+      },
       terrainProvider: Cesium.createWorldTerrain(), //添加全球地形
       // terrainProvider: new Cesium.CesiumTerrainProvider({
       //     url:"../../static/terrain/beijing",
@@ -59,10 +74,10 @@ class Globe {
     var laOptions = {
       destination: Cesium.Rectangle.fromDegrees(minx, miny, maxx, maxy), //(114.368877, 23.050795, 114.459085, 23.108199),//Cesium.Cartesian3.fromDegrees(114.3873, 23.1107, 100000),
       duration: 4,
-      complete: function() {}
+      complete: function () { }
     };
-    tokyoOptions.complete = function() {
-      setTimeout(function() {
+    tokyoOptions.complete = function () {
+      setTimeout(function () {
         camera.flyTo(laOptions);
       }, 100);
     };
@@ -97,7 +112,7 @@ class Globe {
       viewer.zoomTo(tileset);
     }
     tileset.readyPromise
-      .then(function() {
+      .then(function () {
         if (height) {
           height = Number(height);
           if (isNaN(height)) {
@@ -139,7 +154,7 @@ class Globe {
           tileset._root.transform = mat;
         }
       })
-      .otherwise(function(error) {
+      .otherwise(function (error) {
         console.log(error);
       });
     return tileset;
@@ -209,90 +224,87 @@ class Globe {
 
     //修改小控件显示名称
     viewer.homeButton.viewModel.tooltip = "初始位置"; //默认位置设置
-    viewer.navigationHelpButton.viewModel.tooltip = "帮助"; //导航设置
-    //viewer.sceneModePicker.viewModel.tooltip2D = "二维视图"
-    //viewer.sceneModePicker.viewModel.tooltip3D = "三维视图"
-    //viewer.sceneModePicker.viewModel.tooltipColumbusView = "哥伦布视图"
-    //帮组按钮内容进行汉化
-    var clickHelper = viewer.navigationHelpButton.container.getElementsByClassName(
-      "cesium-click-navigation-help"
-    )[0];
-    var touchHelper = viewer.navigationHelpButton.container.getElementsByClassName(
-      "cesium-touch-navigation-help"
-    )[0];
+    // viewer.navigationHelpButton.viewModel.tooltip = "帮助"; //导航设置
+    // //帮组按钮内容进行汉化
+    // var clickHelper = viewer.navigationHelpButton.container.getElementsByClassName(
+    //   "cesium-click-navigation-help"
+    // )[0];
+    // var touchHelper = viewer.navigationHelpButton.container.getElementsByClassName(
+    //   "cesium-touch-navigation-help"
+    // )[0];
 
-    var button = viewer.navigationHelpButton.container.getElementsByClassName(
-      "cesium-navigation-button-right"
-    )[0];
-    button.innerHTML = button.innerHTML.replace(">Touch", ">触摸屏");
-    button = viewer.navigationHelpButton.container.getElementsByClassName(
-      "cesium-navigation-button-left"
-    )[0];
-    button.innerHTML = button.innerHTML.replace(">Mouse", ">鼠标");
+    // var button = viewer.navigationHelpButton.container.getElementsByClassName(
+    //   "cesium-navigation-button-right"
+    // )[0];
+    // button.innerHTML = button.innerHTML.replace(">Touch", ">触摸屏");
+    // button = viewer.navigationHelpButton.container.getElementsByClassName(
+    //   "cesium-navigation-button-left"
+    // )[0];
+    // button.innerHTML = button.innerHTML.replace(">Mouse", ">鼠标");
 
-    var click_help_pan = clickHelper.getElementsByClassName(
-      "cesium-navigation-help-pan"
-    )[0];
-    click_help_pan.innerHTML = "平移";
-    var click_help_pan_details = click_help_pan.parentNode.getElementsByClassName(
-      "cesium-navigation-help-details"
-    )[0];
-    click_help_pan_details.innerHTML = "按下左键 + 拖动";
+    // var click_help_pan = clickHelper.getElementsByClassName(
+    //   "cesium-navigation-help-pan"
+    // )[0];
+    // click_help_pan.innerHTML = "平移";
+    // var click_help_pan_details = click_help_pan.parentNode.getElementsByClassName(
+    //   "cesium-navigation-help-details"
+    // )[0];
+    // click_help_pan_details.innerHTML = "按下左键 + 拖动";
 
-    var click_help_zoom = clickHelper.getElementsByClassName(
-      "cesium-navigation-help-zoom"
-    )[0];
-    click_help_zoom.innerHTML = "旋转";
-    click_help_zoom.parentNode.getElementsByClassName(
-      "cesium-navigation-help-details"
-    )[0].innerHTML = "按下右键+拖动";
-    click_help_zoom.parentNode.getElementsByClassName(
-      "cesium-navigation-help-details"
-    )[1].innerHTML = "";
+    // var click_help_zoom = clickHelper.getElementsByClassName(
+    //   "cesium-navigation-help-zoom"
+    // )[0];
+    // click_help_zoom.innerHTML = "旋转";
+    // click_help_zoom.parentNode.getElementsByClassName(
+    //   "cesium-navigation-help-details"
+    // )[0].innerHTML = "按下右键+拖动";
+    // click_help_zoom.parentNode.getElementsByClassName(
+    //   "cesium-navigation-help-details"
+    // )[1].innerHTML = "";
 
-    var click_help_rotate = clickHelper.getElementsByClassName(
-      "cesium-navigation-help-rotate"
-    )[0];
-    click_help_rotate.innerHTML = "缩放";
-    click_help_rotate.parentNode.getElementsByClassName(
-      "cesium-navigation-help-details"
-    )[0].innerHTML = "滚动鼠标滚轮";
-    click_help_rotate.parentNode.getElementsByClassName(
-      "cesium-navigation-help-details"
-    )[1].innerHTML = "";
+    // var click_help_rotate = clickHelper.getElementsByClassName(
+    //   "cesium-navigation-help-rotate"
+    // )[0];
+    // click_help_rotate.innerHTML = "缩放";
+    // click_help_rotate.parentNode.getElementsByClassName(
+    //   "cesium-navigation-help-details"
+    // )[0].innerHTML = "滚动鼠标滚轮";
+    // click_help_rotate.parentNode.getElementsByClassName(
+    //   "cesium-navigation-help-details"
+    // )[1].innerHTML = "";
 
-    //触屏操作
-    var touch_help_pan = touchHelper.getElementsByClassName(
-      "cesium-navigation-help-pan"
-    )[0];
-    touch_help_pan.innerHTML = "平移";
-    touch_help_pan.parentNode.getElementsByClassName(
-      "cesium-navigation-help-details"
-    )[0].innerHTML = "单指拖动";
+    // //触屏操作
+    // var touch_help_pan = touchHelper.getElementsByClassName(
+    //   "cesium-navigation-help-pan"
+    // )[0];
+    // touch_help_pan.innerHTML = "平移";
+    // touch_help_pan.parentNode.getElementsByClassName(
+    //   "cesium-navigation-help-details"
+    // )[0].innerHTML = "单指拖动";
 
-    var touch_help_zoom = touchHelper.getElementsByClassName(
-      "cesium-navigation-help-zoom"
-    )[0];
-    touch_help_zoom.innerHTML = "缩放";
-    touch_help_zoom.parentNode.getElementsByClassName(
-      "cesium-navigation-help-details"
-    )[0].innerHTML = "双指捏合";
+    // var touch_help_zoom = touchHelper.getElementsByClassName(
+    //   "cesium-navigation-help-zoom"
+    // )[0];
+    // touch_help_zoom.innerHTML = "缩放";
+    // touch_help_zoom.parentNode.getElementsByClassName(
+    //   "cesium-navigation-help-details"
+    // )[0].innerHTML = "双指捏合";
 
-    var touch_help_tilt = touchHelper.getElementsByClassName(
-      "cesium-navigation-help-rotate"
-    )[0];
-    touch_help_tilt.innerHTML = "俯仰";
-    touch_help_tilt.parentNode.getElementsByClassName(
-      "cesium-navigation-help-details"
-    )[0].innerHTML = "双指同向拖动";
+    // var touch_help_tilt = touchHelper.getElementsByClassName(
+    //   "cesium-navigation-help-rotate"
+    // )[0];
+    // touch_help_tilt.innerHTML = "俯仰";
+    // touch_help_tilt.parentNode.getElementsByClassName(
+    //   "cesium-navigation-help-details"
+    // )[0].innerHTML = "双指同向拖动";
 
-    var touch_help_rotate = touchHelper.getElementsByClassName(
-      "cesium-navigation-help-tilt"
-    )[0];
-    touch_help_rotate.innerHTML = "旋转";
-    touch_help_rotate.parentNode.getElementsByClassName(
-      "cesium-navigation-help-details"
-    )[0].innerHTML = "双指反向拖动";
+    // var touch_help_rotate = touchHelper.getElementsByClassName(
+    //   "cesium-navigation-help-tilt"
+    // )[0];
+    // touch_help_rotate.innerHTML = "旋转";
+    // touch_help_rotate.parentNode.getElementsByClassName(
+    //   "cesium-navigation-help-details"
+    // )[0].innerHTML = "双指反向拖动";
   }
   //清除
   clearAll(viewer, active) {
@@ -313,6 +325,20 @@ class Globe {
     } else {
       viewer.scene.terrainProvider = new Cesium.EllipsoidTerrainProvider();
     }
+  }
+  //清除广告牌根据name
+  deleteBillboard(viewer, name) {
+    let entities = viewer.entities._entities._array;
+    let aaa = [];
+    entities.forEach((item, index) => {
+      if (item.name == name) {
+        aaa.push(item);
+      }
+    });
+    aaa.forEach(aI => {
+      viewer.entities.remove(aI);
+      JSON.stringify
+    });
   }
 }
 export default new Globe();

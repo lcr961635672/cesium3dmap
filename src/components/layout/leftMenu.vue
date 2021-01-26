@@ -64,6 +64,43 @@ export default {
           children: [],
         },
         {
+          name: "空间分析",
+          children: [
+            {
+              name: "日照分析",
+              active: false,
+            },
+            {
+              name: "通视分析",
+              active: false,
+            },
+            {
+              name: "可视域",
+              active: false,
+            },
+            {
+              name: "控高分析",
+              active: false,
+            },
+            {
+              name: "淹没分析",
+              active: false,
+            },
+            {
+              name: "地形开挖",
+              active: false,
+            },
+            {
+              name: "剖面分析",
+              active: false,
+            },
+            {
+              name: "挖填方",
+              active: false,
+            },
+          ],
+        },
+        {
           name: "空间测量",
           children: [
             {
@@ -135,43 +172,7 @@ export default {
           name: "视角书签",
           children: [],
         },
-        {
-          name: "空间分析",
-          children: [
-            {
-              name: "日照分析",
-              active: false,
-            },
-            {
-              name: "通视分析",
-              active: false,
-            },
-            {
-              name: "可视域",
-              active: false,
-            },
-            {
-              name: "控高分析",
-              active: false,
-            },
-            {
-              name: "淹没分析",
-              active: false,
-            },
-            {
-              name: "地形开挖",
-              active: false,
-            },
-            {
-              name: "剖面分析",
-              active: false,
-            },
-            {
-              name: "挖填方",
-              active: false,
-            },
-          ],
-        },
+
         {
           name: "对比分析",
           children: [
@@ -253,24 +254,24 @@ export default {
               require(["../toolsPanel/coordinatePosition.vue"], resolve);
           });
           break;
-        // case "空间查询":
-        //   self.$nextTick(() => {
-        //     self.dynamicComponents = resolve =>
-        //       require(["../rightTools/spaceQuery.vue"], resolve);
-        //   });
-        //   self.$parent.$refs.lefttool.queryIClose();
-        //   break;
+        case "空间查询":
+          self.$nextTick(() => {
+            self.dynamicComponents = resolve =>
+              require(["../toolsPanel/spaceQuery.vue"], resolve);
+          });
+          break;
         case "视角书签":
           self.$nextTick(() => {
             self.dynamicComponents = (resolve) =>
               require(["../toolsPanel/viewBook.vue"], resolve);
           });
           break;
-          case "空间分析":
+        case "空间分析":
           self.$nextTick(() => {
             self.dynamicComponents = (resolve) =>
               require(["../toolsPanel/spaceAnalysis.vue"], resolve);
           });
+          break;
         // case "三维分析":
         //   self.$nextTick(() => {
         //     self.dynamicComponents = resolve =>

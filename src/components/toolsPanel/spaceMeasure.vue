@@ -2,7 +2,7 @@
 <template>
   <div class="spaceMeasureWrap">
     <div class="measureImgWrap">
-      <ul>
+      <ul class="contentToolImgUl">
         <li
           v-for="(item, index) in $parent.selectData.children"
           :key="index"
@@ -91,13 +91,5 @@ export default {
 .measureImgWrap {
   overflow: hidden;
 }
-.measureImgWrap li {
-  float: left;
-}
-.toolImg {
-  width: 3vw;
-  height: 3vw;
-  margin: 1vh 1.1vw 0;
-  cursor: pointer;
-}
+
 </style>

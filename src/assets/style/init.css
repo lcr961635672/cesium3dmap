@@ -23,9 +23,11 @@ ul, li {
 .lineToBlock {
     display: inline-block;
 }
+
 .getCursor {
     cursor: pointer;
 }
+
 /* 左浮动 */
 
 .leftFloat {
@@ -76,3 +78,19 @@ ul, li {
 }
 
 /* 空间分析-子组件头部公共样式 结束 */
+
+.contentToolImgUl {
+    overflow: hidden;
+}
+
+.contentToolImgUl li {
+    float: left;
+    width: 33.3%;
+}
+
+.contentToolImgUl .toolImg {
+    width: 2vw;
+    height: 2vw;
+    margin: 1vh 1.1vw 0;
+    cursor: pointer;
+}

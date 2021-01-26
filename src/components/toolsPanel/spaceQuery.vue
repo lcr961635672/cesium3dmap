@@ -1,12 +1,12 @@
-<!-- 空间分析 -->
+<!-- 空间查询 -->
 <template>
   <div>
-    <div class="spaceAnalysisWrap">
+    <div class="spaceQueryWrap">
       <ul class="contentToolImgUl" v-show="firstMenuShow">
         <li
           v-for="(item, index) in $parent.selectData.children"
           :key="index"
-          @click="clickAnalysis(item, index)"
+          @click="clickQuery(item, index)"
         >
           <div v-show="selectIndex !== index">
             <img
@@ -62,68 +62,28 @@ export default {
       self.currentData.active = false;
       self.selectIndex = -1;
     },
-    clickAnalysis(item, index) {
+    clickQuery(item, index) {
       const self = this;
       self.dynamicComponents = null; //先清空之前赋值的组件
       item.active = !item.active;
       self.currentData = item;
       if (item.active) {
-        self.selectIndex = index;
-        self.firstMenuShow = false; //二级菜单展示，一级菜单隐藏
         switch (item.name) {
-          case "日照分析":
-            self.$nextTick(() => {
-              self.dynamicComponents = (
-                resolve //赋值动态组件
-              ) =>
-                require([
-                  "../toolsPanel/spaceAnalysisChild/sunshineAnalysis",
-                ], resolve);
-            });
+          case "":
+            
             break;
-          case "通视分析":
-            self.$nextTick(() => {
-              self.dynamicComponents = (
-                resolve 
-              ) =>
-                require([
-                  "../toolsPanel/spaceAnalysisChild/permeateAnalysis.vue",
-                ], resolve);
-            });
-            break;
-            case "可视域":
-            self.$nextTick(() => {
-              self.dynamicComponents = (
-                resolve 
-              ) =>
-                require([
-                  "../toolsPanel/spaceAnalysisChild/vsualAnalysis.vue",
-                ], resolve);
-            });
-            break;
-            case "剖面分析":
-            self.$nextTick(() => {
-              self.dynamicComponents = (
-                resolve 
-              ) =>
-                require([
-                  "../toolsPanel/spaceAnalysisChild/profileAnalysis.vue",
-                ], resolve);
-            });
-            break;
-
+        
           default:
             break;
         }
-      } else {
-        self.selectIndex = -1;
       }
+     
     },
   },
 };
 </script>
 <style scoped>
-.spaceAnalysisWrap {
+.spaceQueryWrap {
   overflow: hidden;
 }
 
