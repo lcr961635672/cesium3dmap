@@ -25,67 +25,69 @@
 </template>
 
 <script>
-import DrawTool from "../../core/drawPlot/drawTool";
-import promptBox from "../common/promptBox";
+import DrawTool from '../../core/drawPlot/drawTool'
+import promptBox from '../common/promptBox'
 export default {
-  data() {
+  data () {
     return {
       selectIndex: -1,
-      dynamicComponents: null,
-    };
+      dynamicComponents: null
+    }
   },
 
   components: { promptBox },
 
   computed: {},
 
-  mounted() {
-    const self = this;
-    DrawTool.initParam(self.viewer, self.$refs.prompt);
+  mounted () {
+    const self = this
+    DrawTool.initParam(self.viewer, self.$refs.prompt)
   },
 
   methods: {
-    clickTool(item, index) {
-      const self = this;
-      self.selectIndex = index;
-      item.active = !item.active;
+    clickTool (item, index) {
+      const self = this
+      self.selectIndex = index
+      item.active = !item.active
       if (item.active) {
         switch (item.name) {
-          case "空间距离":
+          case '空间距离':
             DrawTool.startDraw({
-              type: "polyline",
+              type: 'polyline',
               style: {
-                material: Cesium.Color.YELLOW,
-                clampToGround: true,
+                material: window.Cesium.Color.YELLOW,
+                clampToGround: true
               },
-              success: function (evt) {},
-            });
-            break;
-          case "垂直距离":
+              success: function (positions) {
+                console.log(positions)
+              }
+            })
+            break
+          case '垂直距离':
             DrawTool.startDraw({
-              type: "rectangle",
+              type: 'rectangle',
               style: {
-                heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+                heightReference: window.Cesium.HeightReference.CLAMP_TO_GROUND
               },
-              success: function (evt) {},
-            });
-            break;
-          case "水平面积":
-            break;
-          case "贴地距离":
-            break;
-          case "贴地面积":
-            break;
-          case "角度":
-            break;
+              success: function (evt) {}
+            })
+            break
+          case '水平面积':
+            break
+          case '贴地距离':
+            break
+          case '贴地面积':
+            break
+          case '角度':
+            break
 
           default:
-            break;
+            break
         }
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 <style scoped>
 .measureImgWrap {

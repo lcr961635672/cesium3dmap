@@ -45,94 +45,93 @@
 </template>
 
 <script>
-import Globe from "../../core/globe";
 export default {
-  data() {
+  data () {
     return {
-      menuImgPre: "../../../static/img/firstMenu/",
-      imgLast: ".png",
+      menuImgPre: '../../../static/img/firstMenu/',
+      imgLast: '.png',
       selectMenuIndex: -1,
       showPanelBtn: false,
       selectData: null,
-      menuName: "",
+      menuName: '',
       dynamicComponents: null,
       treeDefaultCheck: [],
       treeCheckNode: [],
       menuData: [
         {
-          name: "图层目录",
-          children: [],
+          name: '图层目录',
+          children: []
         },
         {
-          name: "空间分析",
+          name: '空间分析',
           children: [
             {
-              name: "日照分析",
-              active: false,
+              name: '日照分析',
+              active: false
             },
             {
-              name: "通视分析",
-              active: false,
+              name: '通视分析',
+              active: false
             },
             {
-              name: "可视域",
-              active: false,
+              name: '可视域',
+              active: false
             },
             {
-              name: "控高分析",
-              active: false,
+              name: '控高分析',
+              active: false
             },
             {
-              name: "淹没分析",
-              active: false,
+              name: '淹没分析',
+              active: false
             },
             {
-              name: "地形开挖",
-              active: false,
+              name: '地形开挖',
+              active: false
             },
             {
-              name: "剖面分析",
-              active: false,
+              name: '剖面分析',
+              active: false
             },
             {
-              name: "挖填方",
-              active: false,
-            },
-          ],
+              name: '挖填方',
+              active: false
+            }
+          ]
         },
         {
-          name: "空间测量",
+          name: '空间测量',
           children: [
             {
-              name: "空间距离",
-              active: false,
+              name: '空间距离',
+              active: false
             },
             {
-              name: "垂直距离",
-              active: false,
+              name: '垂直距离',
+              active: false
             },
 
             {
-              name: "水平面积",
-              active: false,
+              name: '水平面积',
+              active: false
             },
             {
-              name: "贴地距离",
-              active: false,
+              name: '贴地距离',
+              active: false
             },
             {
-              name: "贴地面积",
-              active: false,
+              name: '贴地面积',
+              active: false
             },
             {
-              name: "角度",
-              active: false,
-            },
-          ],
+              name: '角度',
+              active: false
+            }
+          ]
         },
         {
-          name: "坐标定位",
-          children: [],
+          name: '坐标定位',
+          children: []
         },
         //  {
         //   name: "常用工具",
@@ -148,130 +147,130 @@ export default {
         //   ]
         // },
         {
-          name: "空间查询",
+          name: '空间查询',
           children: [
             {
-              name: "地名查询",
-              active: false,
+              name: '地名查询',
+              active: false
             },
             {
-              name: "空间查询",
-              active: false,
+              name: '空间查询',
+              active: false
             },
             {
-              name: "坡度查询",
-              active: false,
+              name: '坡度查询',
+              active: false
             },
             {
-              name: "高程查询",
-              active: false,
-            },
-          ],
+              name: '高程查询',
+              active: false
+            }
+          ]
         },
         {
-          name: "视角书签",
-          children: [],
+          name: '视角书签',
+          children: []
         },
 
         {
-          name: "对比分析",
+          name: '对比分析',
           children: [
             {
-              name: "双图对比",
-              active: false,
+              name: '双图对比',
+              active: false
             },
             {
-              name: "卷帘对比",
-              active: false,
-            },
-          ],
-        },
+              name: '卷帘对比',
+              active: false
+            }
+          ]
+        }
 
         /* {
           name: "控规盒子",
           children: []
         } */
-      ],
-    };
+      ]
+    }
   },
 
   components: {},
 
   computed: {},
 
-  mounted() {},
+  mounted () {},
 
   methods: {
-    hideRight() {
-      const self = this;
-      //self.selectMenuIndex = -1;
-      self.showPanelBtn = false;
+    hideRight () {
+      const self = this
+      // self.selectMenuIndex = -1;
+      self.showPanelBtn = false
     },
-    openRight() {
-      const self = this;
-      if (self.selectMenuIndex == -1) {
+    openRight () {
+      const self = this
+      if (self.selectMenuIndex === -1) {
         self.$message({
-          message: "未选择功能按钮",
-          type: "warning",
-        });
+          message: '未选择功能按钮',
+          type: 'warning'
+        })
       } else {
-        self.showPanelBtn = true;
+        self.showPanelBtn = true
       }
     },
-    closeRightChild() {
-      const self = this;
-      self.selectMenuIndex = -1;
-      self.showPanelBtn = false;
+    closeRightChild () {
+      const self = this
+      self.selectMenuIndex = -1
+      self.showPanelBtn = false
     },
 
-    clickMenu(data, index) {
-      const self = this;
-      self.showPanelBtn = true;
-      self.selectMenuIndex = index;
+    clickMenu (data, index) {
+      const self = this
+      self.showPanelBtn = true
+      self.selectMenuIndex = index
       if (self.selectData) {
         self.selectData.children.forEach((item) => {
-          item.active = false;
-        });
+          item.active = false
+        })
       }
-      self.menuName = data.name;
-      self.selectData = data;
+      self.menuName = data.name
+      self.selectData = data
       switch (data.name) {
-        case "图层目录":
+        case '图层目录':
           self.$nextTick(() => {
             self.dynamicComponents = (resolve) =>
-              require(["../toolsPanel/layersTree.vue"], resolve);
-          });
-          break;
-        case "空间测量":
+              require(['../toolsPanel/layersTree.vue'], resolve)
+          })
+          break
+        case '空间测量':
           self.$nextTick(() => {
             self.dynamicComponents = (resolve) =>
-              require(["../toolsPanel/spaceMeasure.vue"], resolve);
-          });
-          break;
-        case "坐标定位":
+              require(['../toolsPanel/spaceMeasure.vue'], resolve)
+          })
+          break
+        case '坐标定位':
           self.$nextTick(() => {
             self.dynamicComponents = (resolve) =>
-              require(["../toolsPanel/coordinatePosition.vue"], resolve);
-          });
-          break;
-        case "空间查询":
+              require(['../toolsPanel/coordinatePosition.vue'], resolve)
+          })
+          break
+        case '空间查询':
           self.$nextTick(() => {
             self.dynamicComponents = resolve =>
-              require(["../toolsPanel/spaceQuery.vue"], resolve);
-          });
-          break;
-        case "视角书签":
+              require(['../toolsPanel/spaceQuery.vue'], resolve)
+          })
+          break
+        case '视角书签':
           self.$nextTick(() => {
             self.dynamicComponents = (resolve) =>
-              require(["../toolsPanel/viewBook.vue"], resolve);
-          });
-          break;
-        case "空间分析":
+              require(['../toolsPanel/viewBook.vue'], resolve)
+          })
+          break
+        case '空间分析':
           self.$nextTick(() => {
             self.dynamicComponents = (resolve) =>
-              require(["../toolsPanel/spaceAnalysis.vue"], resolve);
-          });
-          break;
+              require(['../toolsPanel/spaceAnalysis.vue'], resolve)
+          })
+          break
         // case "三维分析":
         //   self.$nextTick(() => {
         //     self.dynamicComponents = resolve =>
@@ -318,11 +317,11 @@ export default {
         //   });
         //   break;
         default:
-          break;
+          break
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 <style scoped>
 .firstMenuWrap {
@@ -330,7 +329,7 @@ export default {
   left: 0;
   top: 14vh;
   color: #fff;
-  font-size: 1rem;
+  font-size: 16px;
 }
 .mainMenuLeft {
   margin-left: 1vw;
@@ -345,7 +344,7 @@ export default {
   width: 7rem;
   margin: 0 auto;
   padding: 0 1.2vw;
-  background: rgba(63, 72, 84, 0.7);
+  background: rgba(63, 72, 84, 0.85);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
 }
 .menuToolItem {

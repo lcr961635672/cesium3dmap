@@ -1,229 +1,240 @@
-import Vue from "vue";
+import Vue from 'vue'
 class Globe {
-  constructor() {
+  constructor () {
     this.modelsLevel = [];
+    this.ids = [];
   }
-  //初始化球方法
-  initGlobe() {
-    const self = this;
-    //cesium授权 token
+  // 初始化球方法
+  initGlobe () {
+    const { Cesium } = window
+    // cesium授权 token
     Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIxNmVjNTk0ZC0xYzY1LTQ0ZWUtOWI2Ny1hMjRiNWI1Y2QwZDAiLCJpZCI6OTAxMywic2NvcGVzIjpbImFzciIsImdjIl0sImlhdCI6MTU1MzIxOTM3Mn0.qi5nscj1ebAxZ0qQX35bKk3c71gBnIUhBmq8wEo3JLY'
-    let viewer = new Cesium.Viewer("cesiumContainer", {
-      animation: false, //是否创建动画小部件（左下角）
-      timeline: false, //是否粗昂见时间轴小部件（底部）
-      baseLayerPicker: false, //是否创建底图切换小部件（右上）
-      fullscreenButton: false, //是否创建全屏小部件（右上）
-      geocoder: false, //是否创建搜索小部件（右上）
-      homeButton: true, //是否创建默认位置小部件（右上）
-      navigationHelpButton: false, //是否创建导航小部件（右上）
-      sceneModePicker: false, //是否设置维度选择小部件，二维，三维，2,5维（右上）
-      vrButton: true, //进入vr模式按钮
-      fullscreenButton: true, //全屏
-      infoBox: false, //默认消息框
-      contextOptions: { //地图打印时用到
-        id: "cesiumCanvas",//must
+    let viewer = new Cesium.Viewer('cesiumContainer', {
+      animation: false, // 是否创建动画小部件（左下角）
+      timeline: false, // 是否粗昂见时间轴小部件（底部）
+      baseLayerPicker: false, // 是否创建底图切换小部件（右上）
+      fullscreenButton: false, // 是否创建全屏小部件（右上）
+      geocoder: false, // 是否创建搜索小部件（右上）
+      homeButton: true, // 是否创建默认位置小部件（右上）
+      navigationHelpButton: false, // 是否创建导航小部件（右上）
+      sceneModePicker: false, // 是否设置维度选择小部件，二维，三维，2,5维（右上）
+      vrButton: true, // 进入vr模式按钮
+      infoBox: false, // 默认消息框
+      shouldAnimate: true, // 开启动画
+      contextOptions: { // 地图打印时用到
+        id: 'cesiumCanvas', // must
         webgl: {
           alpha: true,
           depth: false,
           stencil: true,
           antialias: true,
           premultipliedAlpha: true,
-          preserveDrawingBuffer: true, //通过canvas.toDataURL()实现截图需要将该项设置为true
+          preserveDrawingBuffer: true, // 通过canvas.toDataURL()实现截图需要将该项设置为true
           failIfMajorPerformanceCaveat: true
         },
         allowTextureFilterAnisotropic: true
       },
-      terrainProvider: Cesium.createWorldTerrain(), //添加全球地形
+      terrainProvider: Cesium.createWorldTerrain(), // 添加全球地形
       // terrainProvider: new Cesium.CesiumTerrainProvider({
       //     url:"../../static/terrain/beijing",
       // }),
       imageryProvider: new Cesium.WebMapTileServiceImageryProvider({
-        //添加底图图层
-        url: MapConfig.tdtYXURL, //天地图影像
-        layer: "tdtAnnoLayer",
-        style: "default",
-        format: "image/jpeg",
-        tileMatrixSetID: "GoogleMapsCompatible",
+        // 添加底图图层
+        url: MapConfig.tdtYXURL, // 天地图影像
+        layer: 'tdtAnnoLayer',
+        style: 'default',
+        format: 'image/jpeg',
+        tileMatrixSetID: 'GoogleMapsCompatible',
         show: false
       })
-    });
+    })
     viewer.imageryLayers.addImageryProvider(
       new Cesium.WebMapTileServiceImageryProvider({
         url: MapConfig.tdtURL,
-        layer: "tdtAnnoLayer",
-        style: "default",
-        format: "image/jpeg",
-        tileMatrixSetID: "GoogleMapsCompatible",
+        layer: 'tdtAnnoLayer',
+        style: 'default',
+        format: 'image/jpeg',
+        tileMatrixSetID: 'GoogleMapsCompatible',
         show: false
       })
-    );
-    Vue.prototype.viewer = viewer;
+    )
+    Vue.prototype.viewer = viewer
   }
-  //开场动画
-  flytochina_hz(minx, miny, maxx, maxy, viewer) {
-    var self = this;
-    self.xmin = minx;
-    self.ymin = miny;
-    self.xmax = maxx;
-    self.ymax = maxy;
-    var camera = viewer.scene.camera;
+  // 开场动画
+  flytochina_hz (minx, miny, maxx, maxy, viewer) {
+    var self = this
+    self.xmin = minx
+    self.ymin = miny
+    self.xmax = maxx
+    self.ymax = maxy
+    var camera = viewer.scene.camera
     var tokyoOptions = {
-      destination: Cesium.Cartesian3.fromDegrees(99.7478, 36.1218, 30000000), //Cesium.Rectangle.fromDegrees(80, 22, 130, 50),
+      destination: Cesium.Cartesian3.fromDegrees(99.7478, 36.1218, 30000000), // Cesium.Rectangle.fromDegrees(80, 22, 130, 50),
       duration: 5
-    };
+    }
     var laOptions = {
-      destination: Cesium.Rectangle.fromDegrees(minx, miny, maxx, maxy), //(114.368877, 23.050795, 114.459085, 23.108199),//Cesium.Cartesian3.fromDegrees(114.3873, 23.1107, 100000),
+      destination: Cesium.Rectangle.fromDegrees(minx, miny, maxx, maxy), // (114.368877, 23.050795, 114.459085, 23.108199),//Cesium.Cartesian3.fromDegrees(114.3873, 23.1107, 100000),
       duration: 4,
       complete: function () { }
-    };
+    }
     tokyoOptions.complete = function () {
       setTimeout(function () {
-        camera.flyTo(laOptions);
-      }, 100);
-    };
-    camera.flyTo(tokyoOptions);
+        camera.flyTo(laOptions)
+      }, 100)
+    }
+    camera.flyTo(tokyoOptions)
   }
-  //加载3dtiles模型
-  add3DtilesData(viewer, url, height, node) {
-    const self = this;
-    viewer.scene.globe.depthTestAgainstTerrain = true;
+  // 加载3dtiles模型
+  add3DtilesData (viewer, url, height, node) {
+    const self = this
+    viewer.scene.globe.depthTestAgainstTerrain = true
     var tileset = new Cesium.Cesium3DTileset({
       url: url,
       preferLeaves: true
-    });
-    viewer.scene.primitives.add(tileset);
+    })
+    viewer.scene.primitives.add(tileset)
     if (node) {
       if (node.initPosition || node.INIT_POSITION) {
-        let p = node.initPosition ? node.initPosition : node.INIT_POSITION;
-        let positions = p.split(",");
+        let p = node.initPosition ? node.initPosition : node.INIT_POSITION
+        let positions = p.split(',')
         viewer.camera.flyTo({
           destination: Cesium.Cartesian3.fromDegrees(
             positions[0],
             positions[1],
             positions[2]
           )
-        });
+        })
       } else {
-        viewer.zoomTo(tileset);
-        //viewer.zoomTo(tileset, new Cesium.HeadingPitchRange(60, -30.0, 3000));
+        viewer.zoomTo(tileset)
+        // viewer.zoomTo(tileset, new Cesium.HeadingPitchRange(60, -30.0, 3000));
       }
     } else {
-      //viewer.zoomTo(tileset, new Cesium.HeadingPitchRange(60, -30.0, 30000));
-      viewer.zoomTo(tileset);
+      // viewer.zoomTo(tileset, new Cesium.HeadingPitchRange(60, -30.0, 30000));
+      viewer.zoomTo(tileset)
     }
     tileset.readyPromise
       .then(function () {
         if (height) {
-          height = Number(height);
+          height = Number(height)
           if (isNaN(height)) {
-            return;
+            return
           }
         }
         var cartographic = Cesium.Cartographic.fromCartesian(
           tileset.boundingSphere.center
-        );
+        )
         var surface = Cesium.Cartesian3.fromRadians(
           cartographic.longitude,
           cartographic.latitude,
           0.0
-        );
+        )
         var offset = Cesium.Cartesian3.fromRadians(
           cartographic.longitude,
           cartographic.latitude,
           height
-        );
+        )
         var translation = Cesium.Cartesian3.subtract(
           offset,
           surface,
           new Cesium.Cartesian3()
-        );
-        tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation);
+        )
+        tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation)
         if (node.modelPositionCalibration || node.MODEL_POSITION_CALIBRATION) {
           let p = node.modelPositionCalibration
             ? node.modelPositionCalibration
-            : node.MODEL_POSITION_CALIBRATION;
-          let positions = p.split(",");
+            : node.MODEL_POSITION_CALIBRATION
+          let positions = p.split(',')
           // 模型的位置坐标（三维笛卡尔坐标）。Cartesian3
           var position = Cesium.Cartesian3.fromDegrees(
             positions[0],
             positions[1],
             positions[2]
-          );
+          )
           // 模型的位置矩阵(WGS84 Matrix4)。
-          var mat = Cesium.Transforms.eastNorthUpToFixedFrame(position);
-          tileset._root.transform = mat;
+          var mat = Cesium.Transforms.eastNorthUpToFixedFrame(position)
+          tileset._root.transform = mat
         }
       })
       .otherwise(function (error) {
-        console.log(error);
-      });
-    return tileset;
+        console.log(error)
+      })
+    return tileset
   }
-  //修改cesium默认样式
-  changeInitGlobe(viewer) {
-    const self = this;
-    //隐藏cesium版权信息
-    viewer.cesiumWidget.creditContainer.style.display = "none";
-    //屏蔽Cesium的默认双击追踪选中entity行为
+  flyToPoint(viewer, p) {
+    let positions = p.split(',')
+    viewer.camera.flyTo({
+      destination: Cesium.Cartesian3.fromDegrees(
+        positions[0],
+        positions[1],
+        positions[2]
+      )
+    })
+  }
+  // 修改cesium默认样式
+  changeInitGlobe (viewer) {
+    const self = this
+    // 隐藏cesium版权信息
+    viewer.cesiumWidget.creditContainer.style.display = 'none'
+    // 屏蔽Cesium的默认双击追踪选中entity行为
     viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(
       Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK
-    );
-    //导航插件
-    var options = {};
+    )
+    // 导航插件
+    var options = {}
     // 用于在使用重置导航重置地图视图时设置默认视图控制。接受的值是Cesium.Cartographic 和Cesium.Rectangle.
     options.defaultResetView = Cesium.Cartographic.fromDegrees(
       110,
       30,
       2000000
-    );
+    )
     // 用于启用或禁用罗盘。true是启用罗盘，false是禁用罗盘。默认值为true。如果将选项设置为false，则罗盘将不会添加到地图中。
-    options.enableCompass = true;
+    options.enableCompass = true
     // 用于启用或禁用缩放控件。true是启用，false是禁用。默认值为true。如果将选项设置为false，则缩放控件 将不会添加到地图中。
-    options.enableZoomControls = true;
+    options.enableZoomControls = true
     // 用于启用或禁用距离图例。true是启用，false是禁用。默认值为true。如果将选项设置为false，距离图例将不会添加到地图中。
-    options.enableDistanceLegend = true;
+    options.enableDistanceLegend = true
     // 用于启用或禁用指南针外环。true是启用，false是禁用。默认值为true。如果将选项设置为false，则该环将可见但无效。
-    options.enableCompassOuterRing = true;
+    options.enableCompassOuterRing = true
 
-    //CesiumNavigation(viewer, options);
-    //自定义小控件位置
-    //"flex-direction":"column"使每个子元素垂直排列，位置放于距底部5vh,top:unset 默认是有top值所有unset去掉
-    $(".cesium-viewer-toolbar").css({
-      display: "flex",
-      "flex-direction": "column",
-      bottom: "120px",
-      top: "unset"
-    });
-    $(".cesium-viewer-toolbar .cesium-sceneModePicker-wrapper").css(
-      "width",
-      "fit-content"
-    );
+    // CesiumNavigation(viewer, options);
+    // 自定义小控件位置
+    // "flex-direction":"column"使每个子元素垂直排列，位置放于距底部5vh,top:unset 默认是有top值所有unset去掉
+    $('.cesium-viewer-toolbar').css({
+      display: 'flex',
+      'flex-direction': 'column',
+      bottom: '120px',
+      top: 'unset'
+    })
+    $('.cesium-viewer-toolbar .cesium-sceneModePicker-wrapper').css(
+      'width',
+      'fit-content'
+    )
     $(
-      ".cesium-sceneModePicker-wrapper .cesium-sceneModePicker-dropDown-icon"
-    ).css({ float: "left" });
-    $(".cesium-navigation-help").css({
-      top: "unset",
-      bottom: "0",
-      right: "40px",
-      "transform-origin": "right bottom"
-    });
-    $(".cesium-viewer-fullscreenContainer").css({
-      bottom: "86px",
-      right: "9px",
-      width: "32px",
-      height: "32px"
-    });
-    $(".cesium-viewer-vrContainer").css({
-      bottom: "49px",
-      right: "9px",
-      width: "32px",
-      height: "32px",
-      "border-radius": "4px"
-    });
-    $(".cesium-button").css({ "border-radius": "4px" });
+      '.cesium-sceneModePicker-wrapper .cesium-sceneModePicker-dropDown-icon'
+    ).css({ float: 'left' })
+    $('.cesium-navigation-help').css({
+      top: 'unset',
+      bottom: '0',
+      right: '40px',
+      'transform-origin': 'right bottom'
+    })
+    $('.cesium-viewer-fullscreenContainer').css({
+      bottom: '86px',
+      right: '9px',
+      width: '32px',
+      height: '32px'
+    })
+    $('.cesium-viewer-vrContainer').css({
+      bottom: '49px',
+      right: '9px',
+      width: '32px',
+      height: '32px',
+      'border-radius': '4px'
+    })
+    $('.cesium-button').css({ 'border-radius': '4px' })
 
-    //修改小控件显示名称
-    viewer.homeButton.viewModel.tooltip = "初始位置"; //默认位置设置
+    // 修改小控件显示名称
+    viewer.homeButton.viewModel.tooltip = '初始位置' // 默认位置设置
     // viewer.navigationHelpButton.viewModel.tooltip = "帮助"; //导航设置
     // //帮组按钮内容进行汉化
     // var clickHelper = viewer.navigationHelpButton.container.getElementsByClassName(
@@ -306,39 +317,39 @@ class Globe {
     //   "cesium-navigation-help-details"
     // )[0].innerHTML = "双指反向拖动";
   }
-  //清除
-  clearAll(viewer, active) {
-    viewer.entities.removeAll();
-    viewer.scene.primitives.removeAll();
-    active = false;
+  // 清除
+  clearAll (viewer, active) {
+    viewer.entities.removeAll()
+    viewer.scene.primitives.removeAll()
+    active = false
   }
-  //打开关闭地形
-  terrainChange(viewer, showD) {
-    showD = !showD;
+  // 打开关闭地形
+  terrainChange (viewer, showD) {
+    showD = !showD
     if (!showD) {
-      //加载默认全球地形
-      viewer.scene.terrainProvider = Cesium.createWorldTerrain();
-      //加载配置的地形
+      // 加载默认全球地形
+      viewer.scene.terrainProvider = Cesium.createWorldTerrain()
+      // 加载配置的地形
       //   viewer.scene.terrainProvider = new Cesium.CesiumTerrainProvider({
       //     url: config.terrainURL
       //   });
     } else {
-      viewer.scene.terrainProvider = new Cesium.EllipsoidTerrainProvider();
+      viewer.scene.terrainProvider = new Cesium.EllipsoidTerrainProvider()
     }
   }
-  //清除广告牌根据name
-  deleteBillboard(viewer, name) {
-    let entities = viewer.entities._entities._array;
-    let aaa = [];
+  // 清除广告牌根据name
+  deleteBillboard (viewer, name) {
+    let entities = viewer.entities._entities._array
+    let aaa = []
     entities.forEach((item, index) => {
       if (item.name == name) {
-        aaa.push(item);
+        aaa.push(item)
       }
-    });
+    })
     aaa.forEach(aI => {
-      viewer.entities.remove(aI);
+      viewer.entities.remove(aI)
       JSON.stringify
-    });
+    })
   }
 }
-export default new Globe();
+export default new Globe()
