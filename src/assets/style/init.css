@@ -81,6 +81,7 @@ ul, li {
 
 .contentToolImgUl {
     overflow: hidden;
+    font-size: 14px;;
 }
 
 .contentToolImgUl li {

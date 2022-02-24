@@ -226,11 +226,11 @@ export default {
           } else if (type.includes('vector')) {
             layerType = type.split('-')[1]
             const resource = this.vectorDiftypeAdd(node, layerType)
-            const dataSrouce = this.viewer.dataSources.add(resource);
+            const dataSrouce = this.viewer.dataSources.add(resource)
             Globe.ids.push({
-                mark: layerid,
-                layer: dataSrouce
-              })
+              mark: layerid,
+              layer: dataSrouce
+            })
           }
         }
       } else {
@@ -273,17 +273,18 @@ export default {
         }
       })
     },
-    removeVector(viewer, url) {
+    removeVector (viewer, url) {
       let GeoJSONDatas = viewer.dataSources._dataSources
-        GeoJSONDatas.forEach((geoItem) => {
-          if (url.includes(geoItem._name)) {
-            viewer.dataSources.remove(geoItem)
-          }
-        })
+      GeoJSONDatas.forEach((geoItem) => {
+        if (url.includes(geoItem._name)) {
+          viewer.dataSources.remove(geoItem)
+        }
+      })
     },
-    layerDiftypeAdd(node, type) {
-      const {url, layers, initPosition} = node;
-      let result = null;
+    layerDiftypeAdd (node, type) {
+      const { Cesium } = window
+      const {url, layers, initPosition} = node
+      let result = null
       switch (type) {
         case 'wms':
           result = new Cesium.WebMapServiceImageryProvider({
@@ -291,42 +292,45 @@ export default {
             layers,
             parameters: {
               transparent: true,
-              format: "image/png",
-            },
+              format: 'image/png'
+            }
           })
+        // eslint-disable-next-line no-fallthrough
         case 'wmts':
           result = new Cesium.WebMapTileServiceImageryProvider({
             url,
-            style : 'default',
-            format : 'image/jpeg',
-          });
+            style: 'default',
+            format: 'image/jpeg'
+          })
+        // eslint-disable-next-line no-fallthrough
         case 'ArcGIS':
-        result = new Cesium.ArcGisMapServerImageryProvider({
-          url
-        })
-        if (initPosition) {
-          Globe.flyToPoint(this.viewer, initPosition)
-        }
-       return result;
+          result = new Cesium.ArcGisMapServerImageryProvider({
+            url
+          })
+          if (initPosition) {
+            Globe.flyToPoint(this.viewer, initPosition)
+          }
+          return result
       }
-
     },
-    vectorDiftypeAdd(node, type) {
-      const { url, initPosition } = node;
-      let result = null;
+    vectorDiftypeAdd (node, type) {
+      const { Cesium } = window
+      const { url, initPosition } = node
+      let result = null
       switch (type) {
         case 'geojson':
           result = Cesium.GeoJsonDataSource.load(url, {
             stroke: Cesium.Color.WHITE,
-            fill: Cesium.Color.BLUE.withAlpha(0.3), //注意：颜色必须大写，即不能为blue
+            fill: Cesium.Color.BLUE.withAlpha(0.3), // 注意：颜色必须大写，即不能为blue
             strokeWidth: 5
-          });
+          })
+        // eslint-disable-next-line no-fallthrough
         case 'czml':
-        result = Cesium.CzmlDataSource.load(url)
-        if (initPosition) {
-          Globe.flyToPoint(this.viewer, initPosition)
-        }
-        return result;
+          result = Cesium.CzmlDataSource.load(url)
+          if (initPosition) {
+            Globe.flyToPoint(this.viewer, initPosition)
+          }
+          return result
       }
     }
   }

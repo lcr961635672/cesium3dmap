@@ -1,10 +1,13 @@
 /* global Cesium */
 import CreatePolyline from './createPolyline.js'
 // import CreateRectangle from './createRectangle.js'
+import CreatePolygon from './createPolygon.js'
+import CreateBillboard from './createBillboard.js'
+import CreateCircle from './createCircle.js'
 // 动态绘制工具
 class DrawTool {
   constructor () {
-    this.hasEdit = true
+    this.hasEdit = false
     this.toolArr = []
     this.toolArr = []
     this.show = true
@@ -20,6 +23,7 @@ class DrawTool {
   // 开始绘制
   startDraw (opt) {
     var that = this
+    that.hasEdit = opt.style.hasEdit
     if (opt.type === 'polyline') {
       CreatePolyline.initPolyline(this.viewer, opt.style, this.prompt)
       CreatePolyline.start(function (positions) {
@@ -34,43 +38,43 @@ class DrawTool {
       this.toolArr.push(CreatePolyline)
     }
     if (opt.type === 'polygon') {
-      var polygon = new CreatePolygon(this.viewer, opt.style)
-      polygon.start(function () {
+      CreatePolygon.initPolygon(this.viewer, opt.style, this.prompt)
+      CreatePolygon.start(function () {
         if (that.hasEdit) {
           that.unbindEdit()
-          polygon.startModify()
-          that.lastSelectEntity = polygon
+          CreatePolygon.startModify()
+          that.lastSelectEntity = CreatePolygon
         }
-        if (opt.success) opt.success(polygon)
-        if (that.show == false) polygon.setVisible(false)
+        if (opt.success) opt.success(CreatePolygon)
+        if (that.show === false) CreatePolygon.setVisible(false)
       })
-      this.toolArr.push(polygon)
+      this.toolArr.push(CreatePolygon)
     }
     if (opt.type === 'billboard') {
-      var billboard = new CreateBillboard(this.viewer, opt.style)
-      billboard.start(function () {
+      CreateBillboard.initillboard(this.viewer, opt.style, this.prompt)
+      CreateBillboard.start(function () {
         if (that.hasEdit) {
           that.unbindEdit()
-          billboard.startModify()
-          that.lastSelectEntity = billboard
+          CreateBillboard.startModify()
+          that.lastSelectEntity = CreateBillboard
         }
-        if (opt.success) opt.success(billboard)
-        if (that.show == false) billboard.setVisible(false)
+        if (opt.success) opt.success(CreateBillboard)
+        if (that.show === false) CreateBillboard.setVisible(false)
       })
-      this.toolArr.push(billboard)
+      this.toolArr.push(CreateBillboard)
     }
     if (opt.type === 'circle') {
-      var circle = new CreateCircle(this.viewer, opt.style)
-      circle.start(function () {
+      CreateCircle.initCircle(this.viewer, opt.style, this.prompt)
+      CreateCircle.start(function () {
         if (that.hasEdit) {
           that.unbindEdit()
-          circle.startModify()
-          that.lastSelectEntity = circle
+          CreateCircle.startModify()
+          that.lastSelectEntity = CreateCircle
         }
-        if (opt.success) opt.success(circle)
-        if (that.show == false) circle.setVisible(false)
+        if (opt.success) opt.success(CreateCircle)
+        if (that.show === false) CreateCircle.setVisible(false)
       })
-      this.toolArr.push(circle)
+      this.toolArr.push(CreateCircle)
     }
     if (opt.type === 'rectangle') {
       // CreateRectangle.initRectangle(this.viewer, opt.style, this.prompt);

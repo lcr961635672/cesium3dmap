@@ -1,112 +1,110 @@
 /* global Cesium */
-class CreateRectangle {
+
+// 绘制圆
+class CreateCircle {
   constructor () {
     this.objId = Number((new Date()).getTime() + '' + Number(Math.random() * 1000).toFixed(0))
-    this.viewer = null
-    this.handler = null
-    this.modifyHandler = null
-    this.rectangle = null
-    this.rightdownPoint = null
-    this.leftupPoint = null
-    this.leftup = null
-    this.rightdown = null
+    this.circle = null
+    this.screenSpaceCameraController = []
+    this.floatPoint = null
+    this.centerPoint = null
+    this.center = null
+    this.float = null
     this.radius = 0
     this.modifyPoint = null
-    this.screenSpaceCameraController = []
     this.state = 0
     this.pointArr = []
-    this.style = {}
-    this.prompt = null
   }
-  initRectangle (viewer, style, prompt) {
-    this.viewer = viewer
-    this.handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas)
-    this.modifyHandler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas)
-    this.style = style
-    // 初始化鼠标提示框
-    this.prompt = prompt
+  initCircle (viewer, style, prompt) {
+    const that = this
+    that.viewer = viewer
+    that.prompt = prompt
+    that.handler = new Cesium.ScreenSpaceEventHandler(that.viewer.scene.canvas)
+    that.modifyHandler = new Cesium.ScreenSpaceEventHandler(that.viewer.scene.canvas)
+    that.style = style
   }
   start (callBack) {
     var that = this
-    this.handler.setInputAction(function (evt) { // 单击开始绘制
-      var cartesian = that.getCatesian3FromPX(evt.position, that.viewer, [])
-      if (!that.leftupPoint) {
-        that.leftup = cartesian
-        that.leftupPoint = that.createPoint(cartesian)
-        that.leftupPoint.typeAttr = 'leftup'
-        that.rightdownPoint = that.createPoint(cartesian.clone())
-        that.rightdown = cartesian.clone()
-        that.rightdownPoint.typeAttr = 'rightdown'
-        that.rectangle = that.createRectangle(that.leftup, that.radius)
+    this.handler.setInputAction(function (evt) { // 单机开始绘制
+      var cartesian = that.getCatesian3FromPX(evt.position, that.viewer, [that.circle])
+      if (!that.centerPoint) {
+        that.center = cartesian
+        that.centerPoint = that.createPoint(cartesian)
+        that.centerPoint.typeAttr = 'center'
+        that.floatPoint = that.createPoint(cartesian.clone())
+        that.float = cartesian.clone()
+        that.floatPoint.typeAttr = 'float'
+        that.circle = that.createCircle(that.center, that.radius)
       } else {
 
       }
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK)
     this.handler.setInputAction(function (evt) { // 移动时绘制线
-      if (!that.leftupPoint) {
+      if (!that.centerPoint) {
         that.prompt.updatePrompt(evt.endPosition, '单击开始绘制')
         return
       }
       that.prompt.updatePrompt(evt.endPosition, '右键结束')
-      var cartesian = that.getCatesian3FromPX(evt.endPosition, that.viewer, [])
-      if (that.rightdownPoint) {
-        that.rightdownPoint.position.setValue(cartesian)
-        that.rightdown = cartesian.clone()
+      var cartesian = that.getCatesian3FromPX(evt.endPosition, that.viewer, [that.circle])
+      if (that.floatPoint) {
+        that.floatPoint.position.setValue(cartesian)
+        that.float = cartesian.clone()
       }
-      that.radius = Cesium.Cartesian3.distance(cartesian, that.leftup)
+      that.radius = Cesium.Cartesian3.distance(cartesian, that.center)
     }, Cesium.ScreenSpaceEventType.MOUSE_MOVE)
-    this.handler.setInputAction(function () { // 双击结束绘制
-      if (!that.rectangle) {
+    this.handler.setInputAction(function () { // 单机开始绘制
+      if (!that.circle) {
         return
       }
       that.state = 1
       that.handler.destroy()
-      if (that.rightdownPoint) that.rightdownPoint.show = false
-      if (that.leftupPoint) that.leftupPoint.show = false
+      if (that.floatPoint) that.floatPoint.show = false
+      if (that.centerPoint) that.centerPoint.show = false
       if (that.prompt) {
         that.prompt.closePrompt()
+        that.prompt = null
       }
-      if (callBack) callBack(that.rectangle)
-    }, Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK)
+      if (callBack) callBack(that.circle)
+    }, Cesium.ScreenSpaceEventType.RIGHT_CLICK)
   }
   startModify (callback) {
     if (this.state !== 2 && this.state !== 1) return // 表示还没绘制完成
     if (!this.modifyHandler) this.modifyHandler = new Cesium.ScreenSpaceEventHandler(this.viewer.scene.canvas)
     var that = this
-    if (that.rightdownPoint) that.rightdownPoint.show = true
-    if (that.leftupPoint) that.leftupPoint.show = true
+    if (that.floatPoint) that.floatPoint.show = true
+    if (that.centerPoint) that.centerPoint.show = true
     this.modifyHandler.setInputAction(function (evt) {
-      if (!that.rectangle) return
+      if (!that.circle) return
       var pick = that.viewer.scene.pick(evt.position)
       if (Cesium.defined(pick) && pick.id) {
         if (!pick.id.objId) { that.modifyPoint = pick.id }
         that.forbidDrawWorld(true)
       } else {
-        if (that.rightdownPoint) that.rightdownPoint.show = false
-        if (that.leftupPoint) that.leftupPoint.show = false
+        if (that.floatPoint) that.floatPoint.show = false
+        if (that.centerPoint) that.centerPoint.show = false
         if (that.modifyHandler) {
           that.modifyHandler.destroy()
           that.modifyHandler = null
-          if (callback) callback(that.rectangle)
+          if (callback) callback(that.circle)
         }
         that.state = 2
       }
     }, Cesium.ScreenSpaceEventType.LEFT_DOWN)
     this.modifyHandler.setInputAction(function (evt) {
       if (!that.modifyPoint) return
-      var cartesian = that.getCatesian3FromPX(evt.endPosition, that.viewer, [that.rectangle, that.modifyPoint])
+      var cartesian = that.getCatesian3FromPX(evt.endPosition, that.viewer, [that.circle])
       if (!cartesian) {
         return
       }
-      if (that.modifyPoint.typeAttr === 'leftup') {
-        that.leftup = cartesian
-        that.leftupPoint.position.setValue(that.leftup)
-        that.rectangle.position.setValue(that.leftup)
+      if (that.modifyPoint.typeAttr === 'center') {
+        that.center = cartesian
+        that.centerPoint.position.setValue(that.center)
+        that.circle.position.setValue(that.center)
       } else {
-        that.rightdown = cartesian
-        that.rightdownPoint.position.setValue(that.rightdown)
+        that.float = cartesian
+        that.floatPoint.position.setValue(that.float)
       }
-      that.radius = Cesium.Cartesian3.distance(that.rightdown, that.leftup)
+      that.radius = Cesium.Cartesian3.distance(that.float, that.center)
     }, Cesium.ScreenSpaceEventType.MOUSE_MOVE)
 
     this.modifyHandler.setInputAction(function (evt) {
@@ -116,12 +114,12 @@ class CreateRectangle {
     }, Cesium.ScreenSpaceEventType.LEFT_UP)
   }
   endModify (callback) {
-    if (this.rightdownPoint) this.rightdownPoint.show = false
-    if (this.leftupPoint) this.leftupPoint.show = false
+    if (this.floatPoint) this.floatPoint.show = false
+    if (this.centerPoint) this.centerPoint.show = false
     if (this.modifyHandler) {
       this.modifyHandler.destroy()
       this.modifyHandler = null
-      if (callback) callback(this.rectangle)
+      if (callback) callback(this.circle)
     }
     this.state = 2
   }
@@ -139,35 +137,38 @@ class CreateRectangle {
       show: false
     })
   }
-  createRectangle () {
+  createCircle () {
     var that = this
-    var rectangle = this.viewer.entities.add({
-      rectangle: {
-        coordinates: new Cesium.CallbackProperty(function () {
-          return Cesium.Rectangle.fromCartesianArray([that.leftup, that.rightdown])
+    var ellipse = this.viewer.entities.add({
+      position: this.center,
+      ellipse: {
+        semiMajorAxis: new Cesium.CallbackProperty(function () {
+          return that.radius
+        }, false),
+        semiMinorAxis: new Cesium.CallbackProperty(function () {
+          return that.radius
         }, false),
         material: this.style.material || Cesium.Color.YELLOW,
         width: this.style.width || 3,
         heightReference: this.style.heightReference === undefined ? Cesium.HeightReference.CLAMP_TO_GROUND : this.style.heightReference
       }
     })
-    rectangle.objId = this.objId
-    return rectangle
+    ellipse.objId = this.objId
+    return ellipse
   }
-  getPositions () {
-    return [this.leftup, this.rightdown]
+  getCenter () {
+    return this.center
   }
-
   setStyle (obj) {}
   remove () {
-    if (this.rectangle) {
+    if (this.circle) {
       this.state = 0
-      this.viewer.entities.remove(this.rectangle)
-      this.rectangle = null
+      this.viewer.entities.remove(this.circle)
+      this.circle = null
     }
   }
   setVisible (vis) {
-    this.rectangle.show = vis
+    this.circle.show = vis
   }
   forbidDrawWorld (isForbid) {
     this.viewer.scene.screenSpaceCameraController.enableRotate = !isForbid
@@ -184,22 +185,22 @@ class CreateRectangle {
       this.modifyHandler.destroy()
       this.modifyHandler = null
     }
-    if (this.rectangle) {
-      this.viewer.entities.remove(this.rectangle)
-      this.rectangle = null
+    if (this.circle) {
+      this.viewer.entities.remove(this.circle)
+      this.circle = null
     }
-    if (this.rightdownPoint) {
-      this.viewer.entities.remove(this.rightdownPoint)
-      this.rightdownPoint = null
+    if (this.floatPoint) {
+      this.viewer.entities.remove(this.floatPoint)
+      this.floatPoint = null
     }
-    if (this.leftupPoint) {
-      this.viewer.entities.remove(this.leftupPoint)
-      this.leftupPoint = null
+    if (this.centerPoint) {
+      this.viewer.entities.remove(this.centerPoint)
+      this.centerPoint = null
     }
 
     this.style = null
     this.modifyPoint = null
-    if (this.prompt) this.prompt.destroy()
+    if (this.prompt) this.prompt.closePrompt()
   }
   getCatesian3FromPX (px, viewer, entitys) {
     var picks = viewer.scene.drillPick(px)
@@ -229,4 +230,4 @@ class CreateRectangle {
     return cartesian
   }
 }
-export default CreateRectangle()
+export default new CreateCircle()

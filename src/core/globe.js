@@ -1,8 +1,10 @@
 import Vue from 'vue'
+import $ from 'jquery'
+/* global Cesium MapConfig */
 class Globe {
   constructor () {
-    this.modelsLevel = [];
-    this.ids = [];
+    this.modelsLevel = []
+    this.ids = []
   }
   // 初始化球方法
   initGlobe () {
@@ -20,6 +22,7 @@ class Globe {
       sceneModePicker: false, // 是否设置维度选择小部件，二维，三维，2,5维（右上）
       vrButton: true, // 进入vr模式按钮
       infoBox: false, // 默认消息框
+      selectionIndicator: false,
       shouldAnimate: true, // 开启动画
       contextOptions: { // 地图打印时用到
         id: 'cesiumCanvas', // must
@@ -61,6 +64,7 @@ class Globe {
     Vue.prototype.viewer = viewer
   }
   // 开场动画
+  // eslint-disable-next-line camelcase
   flytochina_hz (minx, miny, maxx, maxy, viewer) {
     var self = this
     self.xmin = minx
@@ -86,7 +90,6 @@ class Globe {
   }
   // 加载3dtiles模型
   add3DtilesData (viewer, url, height, node) {
-    const self = this
     viewer.scene.globe.depthTestAgainstTerrain = true
     var tileset = new Cesium.Cesium3DTileset({
       url: url,
@@ -160,7 +163,7 @@ class Globe {
       })
     return tileset
   }
-  flyToPoint(viewer, p) {
+  flyToPoint (viewer, p) {
     let positions = p.split(',')
     viewer.camera.flyTo({
       destination: Cesium.Cartesian3.fromDegrees(
@@ -172,7 +175,6 @@ class Globe {
   }
   // 修改cesium默认样式
   changeInitGlobe (viewer) {
-    const self = this
     // 隐藏cesium版权信息
     viewer.cesiumWidget.creditContainer.style.display = 'none'
     // 屏蔽Cesium的默认双击追踪选中entity行为
@@ -342,13 +344,12 @@ class Globe {
     let entities = viewer.entities._entities._array
     let aaa = []
     entities.forEach((item, index) => {
-      if (item.name == name) {
+      if (item.name === name) {
         aaa.push(item)
       }
     })
     aaa.forEach(aI => {
       viewer.entities.remove(aI)
-      JSON.stringify
     })
   }
 }

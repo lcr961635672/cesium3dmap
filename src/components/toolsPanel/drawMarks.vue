@@ -1,7 +1,7 @@
-<!-- 空间查询 -->
+<!-- 图上标绘 -->
 <template>
   <div>
-    <div class="spaceQueryWrap">
+    <div class="drawMarksWrap">
       <ul class="contentToolImgUl" v-show="firstMenuShow">
         <li
           v-for="(item, index) in $parent.selectData.children"
@@ -26,32 +26,32 @@
           </div>
         </li>
       </ul>
-      <!-- 绑定动态组件 -->
-      <component
-        class="secondMenuWrap"
-        v-show="!firstMenuShow"
-        v-bind:is="dynamicComponents"
-      ></component>
     </div>
+        <promptBox ref="prompt"></promptBox>
+
   </div>
 </template>
 
 <script>
+import DrawTool from '../../core/drawPlot/drawTool'
+import promptBox from '../common/promptBox'
+
 export default {
   data () {
     return {
       selectIndex: -1,
-      dynamicComponents: null,
       firstMenuShow: true,
       currentData: {} // 当前选中的值
     }
   },
 
-  components: {},
+  components: {promptBox},
 
   computed: {},
 
-  mounted () {},
+  mounted () {
+    DrawTool.initParam(this.viewer, this.$refs.prompt)
+  },
 
   methods: {
     // 子菜单返回按钮调用的事件
@@ -64,15 +64,54 @@ export default {
     },
     clickQuery (item, index) {
       const self = this
-      self.dynamicComponents = null // 先清空之前赋值的组件
+      self.selectIndex = index
       item.active = !item.active
       self.currentData = item
       if (item.active) {
         switch (item.name) {
-          case '':
+          case '点':
+            DrawTool.startDraw({
+              type: 'billboard',
+              style: {
 
+              },
+              success: function (positions) {
+                console.log(positions)
+              }
+            })
             break
-
+          case '线':
+            DrawTool.startDraw({
+              type: 'polyline',
+              style: {
+                material: window.Cesium.Color.YELLOW,
+                clampToGround: true
+              },
+              success: function (positions) {
+                console.log(positions)
+              }
+            })
+            break
+          case '面':
+            DrawTool.startDraw({
+              type: 'polygon',
+              style: {
+                clampToGround: true,
+                material: window.Cesium.Color.BLUE
+              },
+              success: function (evt) {}
+            })
+            break
+          case '圆':
+            DrawTool.startDraw({
+              type: 'circle',
+              style: {
+                clampToGround: true,
+                material: window.Cesium.Color.YELLOW
+              },
+              success: function (evt) {}
+            })
+            break
           default:
             break
         }
@@ -82,7 +121,7 @@ export default {
 }
 </script>
 <style scoped>
-.spaceQueryWrap {
+.drawMarksWrap {
   overflow: hidden;
 }
 

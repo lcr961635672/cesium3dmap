@@ -63,43 +63,6 @@ export default {
           children: []
         },
         {
-          name: '空间分析',
-          children: [
-            {
-              name: '日照分析',
-              active: false
-            },
-            {
-              name: '通视分析',
-              active: false
-            },
-            {
-              name: '可视域',
-              active: false
-            },
-            {
-              name: '控高分析',
-              active: false
-            },
-            {
-              name: '淹没分析',
-              active: false
-            },
-            {
-              name: '地形开挖',
-              active: false
-            },
-            {
-              name: '剖面分析',
-              active: false
-            },
-            {
-              name: '挖填方',
-              active: false
-            }
-          ]
-        },
-        {
           name: '空间测量',
           children: [
             {
@@ -122,17 +85,55 @@ export default {
             {
               name: '贴地面积',
               active: false
+            }
+            // {
+            //   name: '角度',
+            //   active: false
+            // }
+          ]
+        },
+        {
+          name: '空间分析',
+          children: [
+            {
+              name: '日照分析',
+              active: false
+            },
+            // {
+            //   name: '通视分析',
+            //   active: false
+            // },
+            {
+              name: '可视域',
+              active: false
+            },
+            // {
+            //   name: '控高分析',
+            //   active: false
+            // },
+            {
+              name: '淹没分析',
+              active: false
+            },
+            // {
+            //   name: '地形开挖',
+            //   active: false
+            // },
+            {
+              name: '剖面分析',
+              active: false
             },
             {
-              name: '角度',
+              name: '挖填方',
               active: false
             }
           ]
         },
-        {
-          name: '坐标定位',
-          children: []
-        },
+
+        // {
+        //   name: '坐标定位',
+        //   children: []
+        // },
         //  {
         //   name: "常用工具",
         //   children: [
@@ -146,31 +147,31 @@ export default {
         //     }
         //   ]
         // },
-        {
-          name: '空间查询',
-          children: [
-            {
-              name: '地名查询',
-              active: false
-            },
-            {
-              name: '空间查询',
-              active: false
-            },
-            {
-              name: '坡度查询',
-              active: false
-            },
-            {
-              name: '高程查询',
-              active: false
-            }
-          ]
-        },
-        {
-          name: '视角书签',
-          children: []
-        },
+        // {
+        //   name: '空间查询',
+        //   children: [
+        //     {
+        //       name: '地名查询',
+        //       active: false
+        //     },
+        //     {
+        //       name: '空间查询',
+        //       active: false
+        //     },
+        //     {
+        //       name: '坡度查询',
+        //       active: false
+        //     },
+        //     {
+        //       name: '高程查询',
+        //       active: false
+        //     }
+        //   ]
+        // },
+        // {
+        //   name: '视角书签',
+        //   children: []
+        // },
 
         {
           name: '对比分析',
@@ -184,6 +185,25 @@ export default {
               active: false
             }
           ]
+        },
+        {
+          name: '飞行漫游',
+          children: []
+        }, {
+          name: '图上标绘',
+          children: [{
+            name: '点',
+            active: false
+          }, {
+            name: '线',
+            active: false
+          }, {
+            name: '面',
+            active: false
+          }, {
+            name: '圆',
+            active: false
+          }]
         }
 
         /* {
@@ -255,7 +275,7 @@ export default {
           break
         case '空间查询':
           self.$nextTick(() => {
-            self.dynamicComponents = resolve =>
+            self.dynamicComponents = (resolve) =>
               require(['../toolsPanel/spaceQuery.vue'], resolve)
           })
           break
@@ -269,6 +289,12 @@ export default {
           self.$nextTick(() => {
             self.dynamicComponents = (resolve) =>
               require(['../toolsPanel/spaceAnalysis.vue'], resolve)
+          })
+          break
+        case '图上标绘':
+          self.$nextTick(() => {
+            self.dynamicComponents = (resolve) =>
+              require(['../toolsPanel/drawMarks.vue'], resolve)
           })
           break
         // case "三维分析":

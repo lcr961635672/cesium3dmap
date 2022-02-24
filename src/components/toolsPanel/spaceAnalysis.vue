@@ -38,89 +38,98 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       selectIndex: -1,
       dynamicComponents: null,
       firstMenuShow: true,
-      currentData: {}, //当前选中的值
-    };
+      currentData: {} // 当前选中的值
+    }
   },
 
   components: {},
 
   computed: {},
 
-  mounted() {},
+  mounted () {},
 
   methods: {
-    //子菜单返回按钮调用的事件
-    childBackMenu() {
-      const self = this;
-      self.firstMenuShow = true;
-      self.dynamicComponents = null;
-      self.currentData.active = false;
-      self.selectIndex = -1;
+    // 子菜单返回按钮调用的事件
+    childBackMenu () {
+      const self = this
+      self.firstMenuShow = true
+      self.dynamicComponents = null
+      self.currentData.active = false
+      self.selectIndex = -1
     },
-    clickAnalysis(item, index) {
-      const self = this;
-      self.dynamicComponents = null; //先清空之前赋值的组件
-      item.active = !item.active;
-      self.currentData = item;
+    clickAnalysis (item, index) {
+      const self = this
+      self.dynamicComponents = null // 先清空之前赋值的组件
+      item.active = !item.active
+      self.currentData = item
       if (item.active) {
-        self.selectIndex = index;
-        self.firstMenuShow = false; //二级菜单展示，一级菜单隐藏
+        self.selectIndex = index
+        self.firstMenuShow = false // 二级菜单展示，一级菜单隐藏
         switch (item.name) {
-          case "日照分析":
+          case '日照分析':
             self.$nextTick(() => {
               self.dynamicComponents = (
-                resolve //赋值动态组件
+                resolve // 赋值动态组件
               ) =>
                 require([
-                  "../toolsPanel/spaceAnalysisChild/sunshineAnalysis",
-                ], resolve);
-            });
-            break;
-          case "通视分析":
+                  '../toolsPanel/spaceAnalysisChild/sunshineAnalysis'
+                ], resolve)
+            })
+            break
+          case '通视分析':
             self.$nextTick(() => {
               self.dynamicComponents = (
-                resolve 
+                resolve
               ) =>
                 require([
-                  "../toolsPanel/spaceAnalysisChild/permeateAnalysis.vue",
-                ], resolve);
-            });
-            break;
-            case "可视域":
+                  '../toolsPanel/spaceAnalysisChild/permeateAnalysis.vue'
+                ], resolve)
+            })
+            break
+          case '可视域':
             self.$nextTick(() => {
               self.dynamicComponents = (
-                resolve 
+                resolve
               ) =>
                 require([
-                  "../toolsPanel/spaceAnalysisChild/vsualAnalysis.vue",
-                ], resolve);
-            });
-            break;
-            case "剖面分析":
+                  '../toolsPanel/spaceAnalysisChild/vsualAnalysis.vue'
+                ], resolve)
+            })
+            break
+          case '剖面分析':
             self.$nextTick(() => {
               self.dynamicComponents = (
-                resolve 
+                resolve
               ) =>
                 require([
-                  "../toolsPanel/spaceAnalysisChild/profileAnalysis.vue",
-                ], resolve);
-            });
-            break;
-
+                  '../toolsPanel/spaceAnalysisChild/profileAnalysis.vue'
+                ], resolve)
+            })
+            break
+          case '淹没分析':
+            self.$nextTick(() => {
+              self.dynamicComponents = (
+                resolve
+              ) =>
+                require([
+                  '../toolsPanel/spaceAnalysisChild/floodAnalysis.vue'
+                ], resolve)
+            })
+            break
           default:
-            break;
+            break
         }
       } else {
-        self.selectIndex = -1;
+        self.selectIndex = -1
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 <style scoped>
 .spaceAnalysisWrap {
