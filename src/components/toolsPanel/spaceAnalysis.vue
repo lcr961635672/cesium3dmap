@@ -121,6 +121,16 @@ export default {
                 ], resolve)
             })
             break
+          case '地形开挖':
+            self.$nextTick(() => {
+              self.dynamicComponents = (
+                resolve
+              ) =>
+                require([
+                  '../toolsPanel/spaceAnalysisChild/terrainExcavateAnalysis.vue'
+                ], resolve)
+            })
+            break
           default:
             break
         }

@@ -1,7 +1,34 @@
 /* global Cesium */
-import PitWallGeometry from '../geo/PitWallGeometry.js'
+//import PitWallGeometry from '../geo/PitWallGeometry'
 class TerrainClip {
-  // 创建井壁
+  start(viewer, points){
+    viewer.scene.globe.depthTestAgainstTerrain = true;
+    var pointsLength = points.length;
+
+    var clippingPlanes = [];
+    for (var i = 0; i < pointsLength; ++i) {
+      var nextIndex = (i + 1) % pointsLength;
+      var midpoint = Cesium.Cartesian3.add(points[i], points[nextIndex], new Cesium.Cartesian3());
+      midpoint = Cesium.Cartesian3.multiplyByScalar(midpoint, 0.5, midpoint);
+
+      var up = Cesium.Cartesian3.normalize(midpoint, new Cesium.Cartesian3());
+      var right = Cesium.Cartesian3.subtract(points[nextIndex], midpoint, new Cesium.Cartesian3());
+      right = Cesium.Cartesian3.normalize(right, right);
+
+      var normal = Cesium.Cartesian3.cross(right, up, new Cesium.Cartesian3());
+      normal = Cesium.Cartesian3.normalize(normal, normal);
+
+      var originCenteredPlane = new Cesium.Plane(normal, 0.0);
+      var distance = Cesium.Plane.getPointDistance(originCenteredPlane, midpoint);
+
+      clippingPlanes.push(new Cesium.ClippingPlane(normal, distance));
+    }
+    viewer.scene.globe.clippingPlanes = new Cesium.ClippingPlaneCollection({
+      planes: clippingPlanes,
+      edgeWidth: 1.0,
+      edgeColor: Cesium.Color.WHITE
+    });
+ }  // 创建井壁
   _createWellWall (bottom, top) {
     // logInfo('井高度', this._minHeight, this._maxHeight, this._topHeights)
 

@@ -115,18 +115,18 @@ export default {
               name: '淹没分析',
               active: false
             },
-            // {
-            //   name: '地形开挖',
-            //   active: false
-            // },
+            {
+              name: '地形开挖',
+              active: false
+            },
             {
               name: '剖面分析',
               active: false
             },
-            {
-              name: '挖填方',
-              active: false
-            }
+            // {
+            //   name: '挖填方',
+            //   active: false
+            // }
           ]
         },
 
@@ -317,13 +317,12 @@ export default {
         //       require(["../rightTools/spaceMeasure.vue"], resolve);
         //   });
         //   break;
-        // case "多图对比":
-        //   self.$nextTick(() => {
-        //     self.dynamicComponents = resolve =>
-        //       require(["../rightTools/multiGraphCompare.vue"], resolve);
-        //   });
-        //   self.$parent.$refs.lefttool.queryIClose();
-        //   break;
+        case "多图对比":
+          self.$nextTick(() => {
+            self.dynamicComponents = resolve =>
+              require(["../toolsPanel/multiGraphCompare.vue"], resolve);
+          });
+          break;
         // case "控规盒子":
         //   self.$nextTick(() => {
         //     self.dynamicComponents = resolve =>

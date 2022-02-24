@@ -1,25 +1,65 @@
-<!-- 地形开挖 -->
+<!-- 淹没分析 -->
 <template>
-  <div></div>
+  <div class="profileAnalysisWrap">
+    <div class="spaceChildHeaderWrap">
+      <div class="leftHeader blockToLine">
+        <i class="el-icon-back getCursor" @click="$parent.childBackMenu"></i>
+        {{ $parent.currentData.name }}
+      </div>
+      <div class="rightHeader blockToLine" @click="beginDraw">
+        <i class="el-icon-edit-outline">{{ drawText }}</i>
+      </div>
+    </div>
+     <promptBox ref="prompt"></promptBox>
+  </div>
 </template>
 
 <script>
+import DrawTool from '../../../core/drawPlot/drawTool'
+import TerrainClip from '../../../core/spaceAnalysis/terrainClip'
+import promptBox from '../../common/promptBox.vue'
 export default {
   data () {
     return {
-
+      start: null,
+      end: null,
+      drawText: '开始绘制',
+      myChart: null
     }
   },
 
-  components: {},
+  components: {promptBox},
 
   computed: {},
 
-  mounted () {},
+  mounted () {
+    DrawTool.initParam(this.viewer, this.$refs.prompt)
+    this.viewer.scene.globe.depthTestAgainstTerrain = true
+  },
 
-  methods: {}
+  methods: {
+    // 开始绘制
+    beginDraw () {
+      const viewer = this.viewer
+      const {Cesium} = window
+      DrawTool.startDraw({
+        type: 'polygon',
+        style: {
+          hasEdit: false,
+          clampToGround: true,
+          // eslint-disable-next-line new-cap
+          material: new Cesium.Color.fromBytes(64, 157, 253, 100)
+        },
+        success: function (evt) {
+          console.log(evt)
+          const { positions, polygon } = evt
+          //viewer.entities.remove(polygon)
+          TerrainClip.start(viewer, positions)
+        }
+      })
+    }
+  }
 }
 </script>
-<style lang="less" scoped>
-
+<style scoped>
 </style>
